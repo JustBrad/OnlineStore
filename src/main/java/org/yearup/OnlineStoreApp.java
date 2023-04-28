@@ -65,13 +65,56 @@ public class OnlineStoreApp
         }
     }
 
+    // Display the home screen
     public void displayHomeScreen()
     {
+        while(true)
+        {
+            System.out.println("\n-----WELCOME-TO-THE-ONLINE-STORE-------\n");
+            System.out.println("What would you like to do?\n");
+            System.out.println("0) Quit");
+            System.out.println("1) Show Products");
+            System.out.println("2) Show Cart\n");
+            System.out.print("Enter an option: ");
+            int option = scanner.nextInt();
+            scanner.nextLine();
+
+            switch(option)
+            {
+                case 0:
+                    System.out.println("Quitting...");
+                    return;
+                case 1:
+                    showProducts();
+                    break;
+                case 2:
+                    showCart();
+                    break;
+                default:
+                    System.out.println("\nInvalid option.");
+                    break;
+            }
+        }
 
     }
-    public void listAllProducts()
+    public void showProducts()
     {
+        System.out.println("\n----------SHOWING-ALL-PRODUCTS----------\n");
+//        for (int i = 0; i < inventory.size(); i++)
+//        {
+//            System.out.println("\nID: " + inventory.get(i).getId());
+//            System.out.println("Name: " + inventory.get(i).getName());
+//            System.out.printf("Price: $%.2f\n", inventory.get(i).getPrice());
+//        }
 
+        for(Product product : inventory)
+        {
+
+            System.out.println("----------------------------------------");
+            System.out.printf("ID: %s\n", product.getId());
+            System.out.printf("Name: %s\n", product.getName());
+            System.out.printf("Price: $%.2f\n", product.getPrice());
+        }
     }
 
     public void showCart()
@@ -87,6 +130,6 @@ public class OnlineStoreApp
     public void run()
     {
         loadInventory();
-        System.out.println("Inventory loaded!");
+        displayHomeScreen();
     }
 }
