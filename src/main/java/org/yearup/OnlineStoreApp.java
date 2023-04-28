@@ -74,6 +74,7 @@ public class OnlineStoreApp
     {
         while(true)
         {
+            // Display options
             System.out.println("\n------WELCOME-TO-THE-ONLINE-STORE-------\n");
             System.out.println("What would you like to do?\n");
             System.out.println("0) Quit");
@@ -83,6 +84,7 @@ public class OnlineStoreApp
             int option = scanner.nextInt();
             scanner.nextLine();
 
+            // Perform action based on input
             switch(option)
             {
                 case 0:
@@ -102,6 +104,8 @@ public class OnlineStoreApp
         }
 
     }
+
+    // List all products & prompt user for ID to add to cart
     public void showProducts()
     {
         System.out.println("\n----------SHOWING-ALL-PRODUCTS----------\n");
@@ -122,14 +126,12 @@ public class OnlineStoreApp
             System.out.println("type 'X' to return to the home screen.\n");
             System.out.print("Enter ID or 'X': ");
             String option = scanner.nextLine();
-
-            // Force all caps
             option = option.toUpperCase();
 
             // Return home if 'X'
             if(option.equalsIgnoreCase("X")) {return;}
 
-            // If item with specified ID exists
+            // If item with specified ID exists, add to cart & update quantities
             if(idMap.containsKey(option))
             {
                 // Get the product from ID map
@@ -166,15 +168,20 @@ public class OnlineStoreApp
 
     }
 
+    // Show everything in cart & provide option to checkout or return to home screen
     public void showCart()
     {
         System.out.println("\n-------------------CART-------------------\n");
         System.out.println("Product                           Quantity\n");
+
+        // Print each product in the cart
         for (Map.Entry <String, Integer> map : cart.entrySet())
         {
             System.out.printf("%-40s %-14s\n", map.getKey(), map.getValue());
         }
         System.out.println("\n------------------------------------------\n");
+
+        // Prompt user
         while(true)
         {
             System.out.println("\nWhat do you want to do?\n");
@@ -183,6 +190,7 @@ public class OnlineStoreApp
             System.out.print("Enter an option: ");
             String option = scanner.nextLine();
 
+            // Checkout
             if(option.equalsIgnoreCase("C"))
             {
                 // Can't checkout if cart is empty
@@ -195,6 +203,7 @@ public class OnlineStoreApp
                     System.out.println("\nYour cart is empty.");
                 }
             }
+            // Return to home screen
             else if(option.equalsIgnoreCase("X"))
             {
                 return;
@@ -207,6 +216,7 @@ public class OnlineStoreApp
 
     }
 
+    // Display total, calculate change, reset total & cart
     public void checkOut()
     {
         System.out.println("\n----------------CHECK-OUT----------------\n");
@@ -215,6 +225,7 @@ public class OnlineStoreApp
         double payment = scanner.nextDouble();
         scanner.nextLine();
 
+        // If payment is insufficient, return money
         if(payment < total)
         {
             System.out.println();
@@ -223,10 +234,13 @@ public class OnlineStoreApp
         }
         else
         {
+            // Get change & complete checkout
             double change = payment - total;
             System.out.println();
             System.out.println("! CHECKOUT COMPLETE !");
             System.out.println("\n------------------------------------------");
+
+            // Print each product in cart
             for (Map.Entry <String, Integer> map : cart.entrySet())
             {
                 System.out.printf("%-40s %-14s\n", map.getKey(), map.getValue());
@@ -241,6 +255,7 @@ public class OnlineStoreApp
         }
     }
 
+    // Run
     public void run()
     {
         loadInventory();
