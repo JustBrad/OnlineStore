@@ -18,6 +18,8 @@ public class OnlineStoreApp
     // ID map for easier searching
     static HashMap<String, Product> idMap = new HashMap<>();
 
+    private double total = 0;
+
     // Load products from inventory.csv into ArrayList & ID HashMap
     public void loadInventory()
     {
@@ -85,7 +87,8 @@ public class OnlineStoreApp
             {
                 case 0:
                     System.out.println("\nQuitting...");
-                    return;
+                    System.exit(0);
+                    break;
                 case 1:
                     showProducts();
                     break;
@@ -132,21 +135,23 @@ public class OnlineStoreApp
                 // Get the product from ID map
                 Product product = idMap.get(option);
 
-                // Add product to cart
+                // If it's the first time product is being added, set quantity to 1
                 if(!cart.containsKey(product.getName()))
                 {
                     cart.put(product.getName(), 1);
                 }
-                else
+                else    // Add 1 to current quantity
                 {
                     int currentQuantity = cart.get(product.getName());
                     cart.put(product.getName(), currentQuantity + 1);
                 }
 
-                // Display message
+                // Add the price to the total
+                total += product.getPrice();
+
+                // Notify user that item has been added & display
                 System.out.println();
-                System.out.println("'" + product.getName() + "' has been added to the cart.");
-                //System.out.println(cart.get(product.getName()));
+                System.out.println("'" + product.getName() + "' has been added to the cart. (+$" + product.getPrice() + ")");
 
                 // Return to home screen
                 return;
@@ -163,17 +168,77 @@ public class OnlineStoreApp
 
     public void showCart()
     {
-        System.out.println("\n------------------CART------------------\n");
+        System.out.println("\n-------------------CART-------------------\n");
+        System.out.println("Product                           Quantity\n");
         for (Map.Entry <String, Integer> map : cart.entrySet())
         {
-            System.out.println("Product:\t\t\t\t\t\t\tQuantity:\n");
-            System.out.println(map.getKey() + "\t\t\t\t" + map.getValue());
+            System.out.printf("%-40s %-14s\n", map.getKey(), map.getValue());
         }
+        System.out.println("\n------------------------------------------\n");
+        while(true)
+        {
+            System.out.println("\nWhat do you want to do?\n");
+            System.out.println("C) Check out");
+            System.out.println("X) Return to home screen\n");
+            System.out.print("Enter an option: ");
+            String option = scanner.nextLine();
+
+            if(option.equalsIgnoreCase("C"))
+            {
+                // Can't checkout if cart is empty
+                if(total > 0)
+                {
+                    checkOut();
+                }
+                else
+                {
+                    System.out.println("\nYour cart is empty.");
+                }
+            }
+            else if(option.equalsIgnoreCase("X"))
+            {
+                return;
+            }
+            else
+            {
+                System.out.println("\nInvalid option.");
+            }
+        }
+
     }
 
     public void checkOut()
     {
+        System.out.println("\n----------------CHECK-OUT----------------\n");
+        System.out.printf("Your total is: $%.2f\n", total);
+        System.out.print("\nEnter a payment amount: $");
+        double payment = scanner.nextDouble();
+        scanner.nextLine();
 
+        if(payment < total)
+        {
+            System.out.println();
+            System.out.println("! INSUFFICIENT FUNDS !");
+            System.out.println("Your $" + payment + " has been returned.");
+        }
+        else
+        {
+            double change = payment - total;
+            System.out.println();
+            System.out.println("! CHECKOUT COMPLETE !");
+            System.out.println("\n------------------------------------------");
+            for (Map.Entry <String, Integer> map : cart.entrySet())
+            {
+                System.out.printf("%-40s %-14s\n", map.getKey(), map.getValue());
+            }
+            System.out.println("------------------------------------------\n");
+            System.out.printf("Your change is $%.2f.\n\n", change);
+
+            // Clear cart & reset total
+            cart.clear();
+            total = 0;
+            displayHomeScreen();
+        }
     }
 
     public void run()
