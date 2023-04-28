@@ -81,8 +81,18 @@ public class OnlineStoreApp
             System.out.println("1) Show Products");
             System.out.println("2) Show Cart\n");
             System.out.print("Enter an option: ");
-            int option = scanner.nextInt();
-            scanner.nextLine();
+            int option = -1;
+
+            // Handle invalid input
+            try
+            {
+                option = Integer.parseInt(scanner.nextLine());
+            }
+            catch(NumberFormatException e)
+            {
+                System.out.println("\nInvalid input.");
+                continue;
+            }
 
             // Perform action based on input
             switch(option)
