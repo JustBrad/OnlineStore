@@ -3,11 +3,12 @@ package org.yearup;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class OnlineStoreApp
 {
-    // Create arraylist & scanner
+    // Create arraylist & scanner for user input
     static ArrayList<Product> inventory = new ArrayList<>();
     static Scanner scanner = new Scanner(System.in);
 
@@ -17,6 +18,7 @@ public class OnlineStoreApp
     // ID map for easier searching
     static HashMap<String, Product> idMap = new HashMap<>();
 
+    // Load products from inventory.csv into ArrayList & ID HashMap
     public void loadInventory()
     {
         // Initialize stream & file scanner
@@ -43,7 +45,7 @@ public class OnlineStoreApp
                 Product product = new Product(id, name, price);
                 inventory.add(product);
 
-                // Load name hashmap
+                // Load ID hashmap
                 String productId = product.getId();
                 idMap.put(productId, product);
             }
@@ -70,7 +72,7 @@ public class OnlineStoreApp
     {
         while(true)
         {
-            System.out.println("\n-----WELCOME-TO-THE-ONLINE-STORE-------\n");
+            System.out.println("\n------WELCOME-TO-THE-ONLINE-STORE-------\n");
             System.out.println("What would you like to do?\n");
             System.out.println("0) Quit");
             System.out.println("1) Show Products");
@@ -101,7 +103,7 @@ public class OnlineStoreApp
     {
         System.out.println("\n----------SHOWING-ALL-PRODUCTS----------\n");
 
-        // Print out info for each product
+        // Print out info for each product using inventory ArrayList
         for(Product product : inventory)
         {
             System.out.println("----------------------------------------");
@@ -110,12 +112,16 @@ public class OnlineStoreApp
             System.out.printf("Price: $%.2f\n", product.getPrice());
         }
 
+        // Prompt user for ID or if they want to return to home screen
         while(true)
         {
             System.out.println("\nEnter the ID of a product to add it to your cart, or");
             System.out.println("type 'X' to return to the home screen.\n");
             System.out.print("Enter ID or 'X': ");
             String option = scanner.nextLine();
+
+            // Force all caps
+            option = option.toUpperCase();
 
             // Return home if 'X'
             if(option.equalsIgnoreCase("X")) {return;}
@@ -147,7 +153,7 @@ public class OnlineStoreApp
             }
             else
             {
-                System.out.println("\nInvalid ID.");
+                System.out.println("\nItem does not exist.");
             }
 
 
@@ -157,7 +163,12 @@ public class OnlineStoreApp
 
     public void showCart()
     {
-
+        System.out.println("\n------------------CART------------------\n");
+        for (Map.Entry <String, Integer> map : cart.entrySet())
+        {
+            System.out.println("Product:\t\t\t\t\t\t\tQuantity:\n");
+            System.out.println(map.getKey() + "\t\t\t\t" + map.getValue());
+        }
     }
 
     public void checkOut()
