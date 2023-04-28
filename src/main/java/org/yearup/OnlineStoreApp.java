@@ -14,8 +14,8 @@ public class OnlineStoreApp
     // Cart holds Name of item, Number of item
     static HashMap<String, Integer> cart = new HashMap<>();
 
-    // Name map for easier searching
-    static HashMap<String, Product> nameMap = new HashMap<>();
+    // ID map for easier searching
+    static HashMap<String, Product> idMap = new HashMap<>();
 
     public void loadInventory()
     {
@@ -44,8 +44,8 @@ public class OnlineStoreApp
                 inventory.add(product);
 
                 // Load name hashmap
-                String productName = product.getName();
-                nameMap.put(productName, product);
+                String productId = product.getId();
+                idMap.put(productId, product);
             }
         }
         catch (Exception e)
@@ -82,7 +82,7 @@ public class OnlineStoreApp
             switch(option)
             {
                 case 0:
-                    System.out.println("Quitting...");
+                    System.out.println("\nQuitting...");
                     return;
                 case 1:
                     showProducts();
@@ -100,21 +100,59 @@ public class OnlineStoreApp
     public void showProducts()
     {
         System.out.println("\n----------SHOWING-ALL-PRODUCTS----------\n");
-//        for (int i = 0; i < inventory.size(); i++)
-//        {
-//            System.out.println("\nID: " + inventory.get(i).getId());
-//            System.out.println("Name: " + inventory.get(i).getName());
-//            System.out.printf("Price: $%.2f\n", inventory.get(i).getPrice());
-//        }
 
+        // Print out info for each product
         for(Product product : inventory)
         {
-
             System.out.println("----------------------------------------");
             System.out.printf("ID: %s\n", product.getId());
             System.out.printf("Name: %s\n", product.getName());
             System.out.printf("Price: $%.2f\n", product.getPrice());
         }
+
+        while(true)
+        {
+            System.out.println("\nEnter the ID of a product to add it to your cart, or");
+            System.out.println("type 'X' to return to the home screen.\n");
+            System.out.print("Enter ID or 'X': ");
+            String option = scanner.nextLine();
+
+            // Return home if 'X'
+            if(option.equalsIgnoreCase("X")) {return;}
+
+            // If item with specified ID exists
+            if(idMap.containsKey(option))
+            {
+                // Get the product from ID map
+                Product product = idMap.get(option);
+
+                // Add product to cart
+                if(!cart.containsKey(product.getName()))
+                {
+                    cart.put(product.getName(), 1);
+                }
+                else
+                {
+                    int currentQuantity = cart.get(product.getName());
+                    cart.put(product.getName(), currentQuantity + 1);
+                }
+
+                // Display message
+                System.out.println();
+                System.out.println("'" + product.getName() + "' has been added to the cart.");
+                //System.out.println(cart.get(product.getName()));
+
+                // Return to home screen
+                return;
+            }
+            else
+            {
+                System.out.println("\nInvalid ID.");
+            }
+
+
+        }
+
     }
 
     public void showCart()
