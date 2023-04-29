@@ -81,7 +81,7 @@ public class OnlineStoreApp
             System.out.println("1) Show Products");
             System.out.println("2) Show Cart\n");
             System.out.print("Enter an option: ");
-            int option = -1;
+            int option = 0;
 
             // Handle invalid input
             try
@@ -189,6 +189,7 @@ public class OnlineStoreApp
         {
             System.out.printf("%-40s %-14s\n", map.getKey(), map.getValue());
         }
+        System.out.printf("\nTOTAL: $%.2f\n", total);
         System.out.println("\n------------------------------------------\n");
 
         // Prompt user
@@ -196,6 +197,8 @@ public class OnlineStoreApp
         {
             System.out.println("\nWhat do you want to do?\n");
             System.out.println("C) Check out");
+            System.out.println("R) Remove an item");
+            System.out.println("E) Empty the cart");;
             System.out.println("X) Return to home screen\n");
             System.out.print("Enter an option: ");
             String option = scanner.nextLine();
@@ -213,6 +216,46 @@ public class OnlineStoreApp
                     System.out.println("\nYour cart is empty.");
                 }
             }
+            // Remove item from cart
+            else if(option.equalsIgnoreCase("R"))
+            {
+                // If cart is empty
+                if(total == 0)
+                {
+                    System.out.println("\nThere are no items to remove.");
+                }
+                else
+                {
+                    removeItem();
+                }
+            }
+            // Empty the cart
+            else if(option.equalsIgnoreCase("E"))
+            {
+                // Only if cart is NOT empty
+                if(!cart.isEmpty())
+                {
+                    // Confirm
+                    System.out.print("\nAre you sure? (y/n) ");
+                    String yesNo = scanner.nextLine();
+                    if (yesNo.equalsIgnoreCase("Y"))
+                    {
+                        cart.clear();
+                        total = 0;
+                        System.out.println("\n! CART HAS BEEN WIPED !");
+                        displayHomeScreen();
+                    } else if (yesNo.equalsIgnoreCase("N"))
+                    {
+                    } else
+                    {
+                        System.out.println("\nInvalid option.");
+                    }
+                }
+                else
+                {
+                    System.out.println("\nYour cart is already empty.");
+                }
+            }
             // Return to home screen
             else if(option.equalsIgnoreCase("X"))
             {
@@ -224,6 +267,50 @@ public class OnlineStoreApp
             }
         }
 
+    }
+
+    // Remove an item from the cart
+    // Case-sensitive, kind of an afterthought
+    public void removeItem()
+    {
+        double price = 0;
+        System.out.print("\nEnter the name of the item you want to remove: ");
+        String item = scanner.nextLine();
+
+        if(cart.containsKey(item))
+        {
+            int quantity = cart.get(item);
+
+            // If only one left, remove completely
+            if(quantity == 1)
+            {
+                cart.remove(item);
+            }
+            // Otherwise, subtract 1 from quantity
+            else
+            {
+                cart.put(item, quantity - 1);
+            }
+
+            // Loop through products to find the price of removed item
+            for(Product product : inventory)
+            {
+                // Find product in arraylist
+                if(item.equalsIgnoreCase(product.getName()))
+                {
+                    // Subtract price from total
+                    price = product.getPrice();
+                    total -= price;
+                }
+            }
+
+            System.out.printf("\n'%s' has been removed. (-$%.2f)\n", item, price);
+            displayHomeScreen();
+        }
+        else
+        {
+            System.out.println("\nThis item is not in your cart");
+        }
     }
 
     // Display total, calculate change, reset total & cart
