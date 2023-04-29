@@ -86,7 +86,7 @@ public class OnlineStoreApp
             // Handle invalid input
             try
             {
-                option = Integer.parseInt(scanner.nextLine());
+                option = Integer.parseInt(scanner.nextLine().strip());
             }
             catch(NumberFormatException e)
             {
@@ -135,7 +135,7 @@ public class OnlineStoreApp
             System.out.println("\nEnter the ID of a product to add it to your cart, or");
             System.out.println("type 'X' to return to the home screen.\n");
             System.out.print("Enter ID or 'X': ");
-            String option = scanner.nextLine();
+            String option = scanner.nextLine().strip();
             option = option.toUpperCase();
 
             // Return home if 'X'
@@ -201,7 +201,7 @@ public class OnlineStoreApp
             System.out.println("E) Empty the cart");;
             System.out.println("X) Return to home screen\n");
             System.out.print("Enter an option: ");
-            String option = scanner.nextLine();
+            String option = scanner.nextLine().strip();
 
             // Checkout
             if(option.equalsIgnoreCase("C"))
@@ -237,7 +237,7 @@ public class OnlineStoreApp
                 {
                     // Confirm
                     System.out.print("\nAre you sure? (y/n) ");
-                    String yesNo = scanner.nextLine();
+                    String yesNo = scanner.nextLine().strip();
                     if (yesNo.equalsIgnoreCase("Y"))
                     {
                         cart.clear();
@@ -275,7 +275,7 @@ public class OnlineStoreApp
     {
         double price = 0;
         System.out.print("\nEnter the name of the item you want to remove: ");
-        String item = scanner.nextLine();
+        String item = scanner.nextLine().strip();
 
         if(cart.containsKey(item))
         {
@@ -327,7 +327,7 @@ public class OnlineStoreApp
             // Handle invalid input
             try
             {
-                payment = Double.parseDouble(scanner.nextLine());
+                payment = Double.parseDouble(scanner.nextLine().strip());
             }
             catch (NumberFormatException e)
             {
