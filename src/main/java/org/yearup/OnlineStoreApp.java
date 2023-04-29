@@ -316,39 +316,52 @@ public class OnlineStoreApp
     // Display total, calculate change, reset total & cart
     public void checkOut()
     {
+        double payment;
         System.out.println("\n----------------CHECK-OUT----------------\n");
         System.out.printf("Your total is: $%.2f\n", total);
-        System.out.print("\nEnter a payment amount: $");
-        double payment = scanner.nextDouble();
-        scanner.nextLine();
 
-        // If payment is insufficient, return money
-        if(payment < total)
+        while(true)
         {
-            System.out.println();
-            System.out.println("! INSUFFICIENT FUNDS !");
-            System.out.println("Your $" + payment + " has been returned.");
-        }
-        else
-        {
-            // Get change & complete checkout
-            double change = payment - total;
-            System.out.println();
-            System.out.println("! CHECKOUT COMPLETE !");
-            System.out.println("\n------------------------------------------");
+            System.out.print("\nEnter a payment amount: $");
 
-            // Print each product in cart
-            for (Map.Entry <String, Integer> map : cart.entrySet())
+            // Handle invalid input
+            try
             {
-                System.out.printf("%-40s %-14s\n", map.getKey(), map.getValue());
+                payment = Double.parseDouble(scanner.nextLine());
             }
-            System.out.println("------------------------------------------\n");
-            System.out.printf("Your change is $%.2f.\n\n", change);
+            catch (NumberFormatException e)
+            {
+                System.out.println("\nInvalid input.");
+                continue;
+            }
 
-            // Clear cart & reset total
-            cart.clear();
-            total = 0;
-            displayHomeScreen();
+            // If payment is insufficient, return money
+            if (payment < total)
+            {
+                System.out.println();
+                System.out.println("! INSUFFICIENT FUNDS !");
+                System.out.println("Your $" + payment + " has been returned.");
+            } else
+            {
+                // Get change & complete checkout
+                double change = payment - total;
+                System.out.println();
+                System.out.println("! CHECKOUT COMPLETE !");
+                System.out.println("\n------------------------------------------");
+
+                // Print each product in cart
+                for (Map.Entry<String, Integer> map : cart.entrySet())
+                {
+                    System.out.printf("%-40s %-14s\n", map.getKey(), map.getValue());
+                }
+                System.out.println("------------------------------------------\n");
+                System.out.printf("Your change is $%.2f.\n\n", change);
+
+                // Clear cart & reset total
+                cart.clear();
+                total = 0;
+                displayHomeScreen();
+            }
         }
     }
 
