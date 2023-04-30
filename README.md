@@ -27,7 +27,12 @@ NOTE: Entering an invalid ID will NOT crash the program.
 
 ## Show Cart
 On the Show Cart screen, all items in the cart will be displayed with their name and quantity.
-Users will then be prompted to either check out or return to the Home screen by entering "C" or "X" respectively.
+Users will then be prompted to do one of the following: 
+
+1. Check out
+2. Remove an item
+3. Empty the cart
+4. Return to home screen
 
 ![Show Cart](images/showCart.png)
 
